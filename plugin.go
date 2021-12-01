@@ -44,8 +44,8 @@ func (o *xss) Evaluate(tx *coraza.Transaction, value string) bool {
 }
 
 func init() {
-	operators.RegisterOperator("detectSQLi", func() coraza.RuleOperator { return new(sqli) })
-	operators.RegisterOperator("detectXSS", func() coraza.RuleOperator { return new(xss) })
+	operators.RegisterPlugin("detectSQLi", func() coraza.RuleOperator { return new(sqli) })
+	operators.RegisterPlugin("detectXSS", func() coraza.RuleOperator { return new(xss) })
 }
 
 var (

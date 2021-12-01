@@ -41,7 +41,7 @@ func TestPlugin(t *testing.T) {
 	if !xss.Evaluate(tx, "<script>alert(123);</script>") {
 		t.Error("Expected true")
 	}
-	if !sqli.Evaluate(tx, "' or ''='") {
+	if !sqli.Evaluate(tx, "unittests@coreruleset.org\" sleep(10.to_i) ") {
 		t.Error("Expected true")
 	}
 }
