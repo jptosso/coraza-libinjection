@@ -21,6 +21,7 @@ package plugin
 #cgo LDFLAGS: -L/usr/local/lib -linjection
 #include "libinjection.h"
 #include "libinjection_sqli.h"
+#include "stdlib.h"
 */
 import "C"
 import (
@@ -31,7 +32,9 @@ import (
 func isSQLi(statement string) (bool, string) {
 	var out [8]C.char
 	pointer := (*C.char)(unsafe.Pointer(&out[0]))
-	if found := C.libinjection_sqli(C.CString(statement), C.size_t(len(statement)), pointer); found == 1 {
+	cStatement := C.CString(statement)
+	defer C.free(unsafe.Pointer(cStatement))
+	if found := C.libinjection_sqli(cStatement, C.size_t(len(statement)), pointer); found == 1 {
 		output := C.GoBytes(unsafe.Pointer(&out[0]), 8)
 		return true, string(output[:bytes.Index(output, []byte{0})])
 	}
@@ -39,7 +42,9 @@ func isSQLi(statement string) (bool, string) {
 }
 
 func isXSS(input string) bool {
-	if found := C.libinjection_xss(C.CString(input), C.size_t(len(input))); found == 1 {
+	cInput := C.CString(input)
+	defer C.free(unsafe.Pointer(cInput))
+	if found := C.libinjection_xss(cInput, C.size_t(len(input))); found == 1 {
 		return true
 	}
 	return false
