@@ -20,11 +20,7 @@ import (
 
 func isSQLi(statement string) (bool, string) {
 	result, fingerprint := libinjection.IsSQLi(statement)
-	if result {
-		return true, string(fingerprint)
-	} else {
-		return false, ""
-	}
+	return result, string(fingerprint)
 }
 
 func isXSS(input string) bool {
