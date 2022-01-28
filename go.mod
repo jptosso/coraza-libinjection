@@ -2,7 +2,10 @@ module github.com/jptosso/coraza-libinjection
 
 go 1.17
 
-require github.com/jptosso/coraza-waf/v2 v2.0.0-beta.2.0.20211201203316-49869b6ff2ea
+require (
+	github.com/bxlxx/libinjection-go v0.0.0-20220127103427-3c1ac8059b35
+	github.com/jptosso/coraza-waf/v2 v2.0.0-beta.2.0.20211201203316-49869b6ff2ea
+)
 
 require (
 	github.com/cloudflare/ahocorasick v0.0.0-20210425175752-730270c3e184 // indirect
