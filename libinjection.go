@@ -1,6 +1,3 @@
-//go:build cgo
-// +build cgo
-
 // Copyright 2021 Juan Pablo Tosso
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,35 +14,19 @@
 
 package plugin
 
-/*
-#cgo LDFLAGS: -L/usr/local/lib -linjection
-#include "libinjection.h"
-#include "libinjection_sqli.h"
-#include "stdlib.h"
-*/
-import "C"
 import (
-	"bytes"
-	"unsafe"
+	"github.com/bxlxx/libinjection-go"
 )
 
 func isSQLi(statement string) (bool, string) {
-	var out [8]C.char
-	pointer := (*C.char)(unsafe.Pointer(&out[0]))
-	cStatement := C.CString(statement)
-	defer C.free(unsafe.Pointer(cStatement))
-	if found := C.libinjection_sqli(cStatement, C.size_t(len(statement)), pointer); found == 1 {
-		output := C.GoBytes(unsafe.Pointer(&out[0]), 8)
-		return true, string(output[:bytes.Index(output, []byte{0})])
+	result, fingerprint := libinjection.IsSQLi(statement)
+	if result {
+		return true, string(fingerprint)
+	} else {
+		return false, ""
 	}
-	return false, ""
 }
 
 func isXSS(input string) bool {
-	cInput := C.CString(input)
-	defer C.free(unsafe.Pointer(cInput))
-	if found := C.libinjection_xss(cInput, C.size_t(len(input))); found == 1 {
-		return true
-	}
-	return false
+	return libinjection.IsXSS(input)
 }
