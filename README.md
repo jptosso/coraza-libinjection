@@ -1,5 +1,3 @@
-# libinjection plugin
+The project was merged into Coraza v2 Core, it's not supported anymore.
 
-## Prerequisites
-* [Golang 1.16+](https://golang.org/doc/install)
-* Linux Operating system (Coraza does not support Windows)
+No more CGO and libinjection required.
